@@ -2,9 +2,14 @@ import sys
 import discord
 from command.interpreter import Interpreter
 from command.transactor import Transactor
+from database.connection import DbConnection
+from database.schema import Schema
 
 token_path = '.token'
 discord_client = discord.Client()
+
+db_path = "project_sword.sqlite"
+db_connection = None
 
 transactor = None
 
@@ -20,6 +25,10 @@ async def on_ready():
     print(f"Logged in as '{discord_client.user}'")
 
     try:
+        global db_connection
+        db_connection = DbConnection(db_path)
+        Schema(db_connection).prepare()
+
         global transactor
         transactor = Transactor()
 

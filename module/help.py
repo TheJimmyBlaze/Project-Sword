@@ -10,4 +10,4 @@ class HelpModule:
         return False
     
     async def __print_help(self, message):
-        await message.channel.send("> I don't know how to help you :(")
+        await message.channel.send("> TODO: Link to a quickstart guide, and the wiki")
