@@ -1,5 +1,5 @@
 
-class HelpModule:
+class Help:
 
     async def handle_command(self, command, message):
         if command[0] in ["help", "hlp", "h", "?"]:

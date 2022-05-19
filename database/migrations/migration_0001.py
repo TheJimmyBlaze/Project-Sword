@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS version (
 """
 
 create_user_table = """
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS character (
     identity_id INTEGER PRIMARY KEY AUTOINCREMENT,
     discord_id TEXT NOT NULL UNIQUE,
-    display_name TEXT NOT NULL UNIQUE
+    display_name TEXT NOT NULL
 );
 """

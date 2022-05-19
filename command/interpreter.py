@@ -1,17 +1,21 @@
 from datetime import datetime
 from datetime import timedelta
-from module.help import HelpModule
+
+from module.help import Help
+from module.character import Character
 
 class Interpreter:
-    def __init__(self, discord_client, prefix, timeout, transactor):
+    def __init__(self, discord_client, prefix, timeout, connection, transactor):
         self.discord_client = discord_client
 
         self.prefix = prefix
         self.timeout = timeout
 
         self.transactor = transactor
+        self.connection = connection
 
-        self.help_module = HelpModule()
+        self.help_module = Help()
+        self.character_module = Character(connection, transactor)
         
         print("Interpreter initialized")
 
@@ -30,11 +34,10 @@ class Interpreter:
         transaction = self.transactor.find_transaction(message.author.id)
         if transaction is not None:
             if transaction.timestamp + timedelta(seconds=self.timeout) < datetime.now():
-                timeout_message = "> Your {} command has timed out.".format(transaction.description)
                 self.transactor.clear_transaction(message.author.id)
-                print(f"An expired transaction has been cleared")
+                print("An expired transaction has been cleared")
 
-                await message.channel.send(timeout_message)
+                await message.channel.send(f"> Your {transaction.description} command has timed out.")
                 return
             
             print(f"Processing transaction response: {transaction.description}, {raw}")
@@ -43,6 +46,8 @@ class Interpreter:
 
     async def __handle_command(self, command, message):
         if await self.help_module.handle_command(command, message):
+            return
+        if await self.character_module.handle_command(command, message):
             return
 
     def __ignore(self, raw, command, message):

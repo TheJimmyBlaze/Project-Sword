@@ -33,7 +33,7 @@ async def on_ready():
         transactor = Transactor()
 
         global interpreter
-        interpreter = Interpreter(discord_client, command_prefix, command_timeout, transactor)
+        interpreter = Interpreter(discord_client, command_prefix, command_timeout, db_connection, transactor)
         
     except BaseException as ex:
         print("An critical error occurred during startup, Project-Sword could not start")
