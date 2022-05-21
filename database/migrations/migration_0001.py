@@ -26,6 +26,7 @@ create_user_table = """
 CREATE TABLE IF NOT EXISTS character (
     identity_id INTEGER PRIMARY KEY AUTOINCREMENT,
     discord_id TEXT NOT NULL UNIQUE,
-    display_name TEXT NOT NULL
+    display_name TEXT NOT NULL,
+    location_id TEXT NULL
 );
 """

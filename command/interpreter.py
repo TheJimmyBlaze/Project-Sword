@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from module.help import Help
 from module.character import Character
+from module.location import Location
 
 class Interpreter:
     def __init__(self, discord_client, prefix, timeout, connection, transactor):
@@ -16,6 +17,7 @@ class Interpreter:
 
         self.help_module = Help()
         self.character_module = Character(connection, transactor)
+        self.location_module = Location(connection, transactor)
         
         print("Interpreter initialized")
 
@@ -49,6 +51,10 @@ class Interpreter:
             return
         if await self.character_module.handle_command(command, message):
             return
+        if await self.location_module.handle_command(command, message):
+            return
+
+        print(f"Command: {command} is not supported by any modules")
 
     def __ignore(self, raw, command, message):
         if raw == self.prefix:
