@@ -6,8 +6,8 @@ from content.locations.sunreach.sunreach_village import SunreachVillage
 default_location_id = SunreachVillage.natural_id
 
 locations = {
-    SunreachVillage.natural_id: SunreachVillage,
-    LodestoneInn.natural_id: LodestoneInn
+    SunreachVillage.natural_id: SunreachVillage(),
+    LodestoneInn.natural_id: LodestoneInn()
 }
 
 class LocationDictionary:
@@ -18,4 +18,4 @@ class LocationDictionary:
         if location_id in locations:
             location = locations[location_id]
 
-        return location()
+        return location

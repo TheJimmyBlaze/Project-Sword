@@ -1,9 +1,12 @@
 import sys
 import discord
+
 from command.interpreter import Interpreter
 from command.transactor import Transactor
 from database.connection import DbConnection
 from database.schema import Schema
+
+from module.door import DoorIndex
 
 token_path = '.token'
 discord_client = discord.Client()
@@ -16,6 +19,8 @@ transactor = None
 command_prefix = "."
 command_timeout = 30 # Seconds
 interpreter = None
+
+door_index = None
 
 # On ready setup all required resources
 @discord_client.event
@@ -34,6 +39,9 @@ async def on_ready():
 
         global interpreter
         interpreter = Interpreter(discord_client, command_prefix, command_timeout, db_connection, transactor)
+
+        global door_index
+        door_index = DoorIndex()
         
     except BaseException as ex:
         print("An critical error occurred during startup, Project-Sword could not start")

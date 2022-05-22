@@ -9,5 +9,5 @@ class SunreachVillage:
     location_type = LocationTypes.village
     is_interior = False
     sub_locations = [
-        LodestoneInn
+        LodestoneInn()
     ]
