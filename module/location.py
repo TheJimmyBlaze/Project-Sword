@@ -23,8 +23,9 @@ class Location:
     async def __describe_current_location(self, message):
         location = await self.get_character_location(message.author.id)
 
-        await message.channel.send("> You are in...\n")
-        await self.__describe_location(message, location)
+        location_message = "> You are in...\n> \n"
+        location_message += self.__describe_location(location)
+        await message.channel.send(location_message)
 
     async def __describe_command_location(self, command, message):
         if len(command) < 3:
@@ -37,28 +38,28 @@ class Location:
             await message.channel.send(f"> There is no location: '{command_location}'")
             return
 
-        await self.__describe_location(message, location, False)
+        location_message = self.__describe_location(location, False)
+        await message.channel.send(location_message)
 
-    async def __describe_location(self, message, location, verbose = True):
+    def __describe_location(self, location, verbose = True):
 
         # Describe location
-        locationDescription = f">>> ***{location.display_name}***"
-        locationDescription += f"\n`{location.description}`"
+        location_description = f">>> ***{location.display_name}***"
+        location_description += f"\n`{location.description}`"
 
         # If not verbose, just print the description
         if not verbose:
-            await message.channel.send(locationDescription)
-            return
+            return location_description
 
         # Describe adjacent locations
-        locationDescription += "\n"
+        location_description += "\n"
         doors = self.door_index.get_doors_for_location(location.natural_id)
-        locationDescription += f"\nYou can see {len(doors)} nearby {'location' if len(doors) == 1 else 'locations'}:"
+        location_description += f"\nYou can see {len(doors)} nearby {'location' if len(doors) == 1 else 'locations'}:"
 
         for door in doors:
-            locationDescription += f"\n`{door.display_name}`"
+            location_description += f"\n`{door.display_name}`"
 
-        await message.channel.send(locationDescription)
+        return location_description
 
     async def get_character_location(self, discord_id):
         print(f"Getting location for user_id: {discord_id}")
