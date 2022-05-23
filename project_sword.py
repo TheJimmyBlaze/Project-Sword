@@ -34,14 +34,14 @@ async def on_ready():
         db_connection = DbConnection(db_path)
         Schema(db_connection).prepare()
 
+        global door_index
+        door_index = DoorIndex()
+
         global transactor
         transactor = Transactor()
 
         global interpreter
-        interpreter = Interpreter(discord_client, command_prefix, command_timeout, db_connection, transactor)
-
-        global door_index
-        door_index = DoorIndex()
+        interpreter = Interpreter(discord_client, command_prefix, command_timeout, db_connection, transactor, door_index)
         
     except BaseException as ex:
         print("An critical error occurred during startup, Project-Sword could not start")
@@ -53,12 +53,12 @@ async def on_ready():
 # On message send the data to the interpreter to handle
 @discord_client.event
 async def on_message(message):
-    try:
+    # try:
         await interpreter.interpret(message)
 
-    except BaseException as ex:
-        print(f"An error occurred interpreting the message: '{message.content}'")
-        print(f"Error: {ex}")
+    # except BaseException as ex:
+    #     print(f"An error occurred interpreting the message: '{message.content}'")
+    #     print(f"Error: {ex}")
 
 # Read the token and start the server
 print("Launching Project-Sword...")

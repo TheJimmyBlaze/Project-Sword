@@ -3,10 +3,9 @@ from content.locations.location_dictionary import locations
 class DoorIndex:
     def __init__(self):
         self.index = self.__build_index()
+        print("Door index initialized")
 
     def __build_index(self):
-
-        print("Initializing door indexes...")
         index = {}
         for location in locations.values():
             doors = location.sub_locations
@@ -22,6 +21,7 @@ class DoorIndex:
                             break
 
             index[location.natural_id] = doors
+        return index
 
     def get_doors_for_location(self, location_id):
         return self.index[location_id]

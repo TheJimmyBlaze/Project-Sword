@@ -6,18 +6,19 @@ from module.character import Character
 from module.location import Location
 
 class Interpreter:
-    def __init__(self, discord_client, prefix, timeout, connection, transactor):
+    def __init__(self, discord_client, prefix, timeout, connection, transactor, door_index):
         self.discord_client = discord_client
 
         self.prefix = prefix
         self.timeout = timeout
 
-        self.transactor = transactor
         self.connection = connection
+        self.transactor = transactor
+        self.door_index = door_index
 
         self.help_module = Help()
         self.character_module = Character(connection, transactor)
-        self.location_module = Location(connection, transactor)
+        self.location_module = Location(connection, transactor, door_index)
         
         print("Interpreter initialized")
 
