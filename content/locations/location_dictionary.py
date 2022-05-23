@@ -12,10 +12,16 @@ locations = {
 
 class LocationDictionary:
 
-    def find_location(location_id):
+    def get_default_location():
+        return locations[default_location_id]
 
-        location = locations[default_location_id]
+    def find_location_by_id(location_id):
         if location_id in locations:
-            location = locations[location_id]
+            return locations[location_id]
+        return None
 
-        return location
+    def find_location_by_display_name(display_name):
+        for location in locations.values():
+            if location.display_name.lower() == display_name.lower():
+                return location
+        return None

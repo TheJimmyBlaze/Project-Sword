@@ -18,7 +18,7 @@ class Interpreter:
 
         self.help_module = Help()
         self.character_module = Character(connection, transactor)
-        self.location_module = Location(connection, transactor, door_index)
+        self.location_module = Location(connection, self, transactor, door_index)
         
         print("Interpreter initialized")
 
@@ -73,3 +73,13 @@ class Interpreter:
         lower_case = map(lambda cmd: cmd.lower(), case_variant)
         command = list(lower_case)
         return command
+
+    def get_command_suffix(self, command, message, count):
+        raw = message.content
+        working = raw.replace(self.prefix, "")
+
+        for i in range(count):
+            working = working.replace(command[i], "")
+
+        suffix = working.strip()
+        return suffix
