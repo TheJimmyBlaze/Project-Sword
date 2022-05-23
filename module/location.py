@@ -1,5 +1,6 @@
 from ast import Assert
 from content.locations.location_dictionary import LocationDictionary
+from content.locations.location_types import LocationTypes
 
 class Location:
     def __init__(self, connection, interpreter, transactor, door_index):
@@ -44,7 +45,8 @@ class Location:
     def __describe_location(self, location, verbose = True):
 
         # Describe location
-        location_description = f">>> ***{location.display_name}***"
+        icon = LocationTypes.get_icon(location.location_type)
+        location_description = f">>> {icon} ***{location.display_name}***"
         location_description += f"\n`{location.description}`"
 
         # If not verbose, just print the description
@@ -57,7 +59,8 @@ class Location:
         location_description += f"\nYou can see {len(doors)} nearby {'location' if len(doors) == 1 else 'locations'}:"
 
         for door in doors:
-            location_description += f"\n`{door.display_name}`"
+            icon = LocationTypes.get_icon(door.location_type)
+            location_description += f"\n {icon} `{door.display_name}`"
 
         return location_description
 
