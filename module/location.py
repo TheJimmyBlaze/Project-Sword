@@ -8,22 +8,28 @@ class Location:
 
     async def handle_command(self, command, message):
         if command[0] in ["location", "loc", "lc"]:
-            if command[1] in ["info", "where"]:
+            if len(command) >= 1 and command[1] in ["info", "where"]:
                 await self.__describe_location(message)
                 return True
 
         return False
 
-    async def __describe_location(self, message):
+    async def __describe_location(self, message, verbose = True):
         location = await self.get_character_location(message.author.id)
 
         # Describe location
         locationDescription = f"> You're currently at {location.display_name}."
-        locationDescription += "\n> "
+        locationDescription += f"\n> `{location.description}`"
+
+        # If not verbose, just print the description
+        if not verbose:
+            await message.channel.send(locationDescription)
+            return
 
         # Describe adjacent locations
+        locationDescription += "\n> "
         doors = self.door_index.get_doors_for_location(location.natural_id)
-        locationDescription += f"\n> There are {len(doors)} nearby locations:"
+        locationDescription += f"\n> There is {len(doors)} nearby locations:"
 
         for door in doors:
             locationDescription += f"\n> `{door.display_name}`"

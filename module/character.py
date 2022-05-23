@@ -11,7 +11,7 @@ class Character:
 
     async def handle_command(self, command, message):
         if command[0] in ["character", "char", "ch"]:
-            if command[1] == "create":
+            if len(command) >= 1 and command[1] == "create":
                 await self.__create_character(message)
                 return True
 
