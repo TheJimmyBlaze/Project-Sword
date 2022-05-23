@@ -15,11 +15,15 @@ class Character:
                 await self.__create_character(message)
                 return True
 
+        character_exists = self.get_character_exists(message.author.id)
+        if not character_exists:
+            await message.channel.send("> A new adventurer? Create you character and I will follow your command.")
+            return True
+
         return False
 
     async def __create_character(self, message):
-        character_rows = self.connection.get_query(get_existing_character, [message.author.id])
-        existing_character = len(character_rows) > 0 and character_rows[0][0]
+        existing_character = self.get_character_exists(message.author.id)
         if existing_character:
             await message.channel.send(f"> You've been here before. I remember you as {existing_character}.")
             return
@@ -44,6 +48,10 @@ class Character:
         
         await message.channel.send(f"> The name '{name}' is too complex, it may only contain letters apostrophes hyphens and a single space. Try another name instead.")
         
+    def get_character_exists(self, discord_id):
+        character_rows = self.connection.get_query(get_existing_character, [discord_id])
+        character_exists = len(character_rows) > 0 and character_rows[0][0]
+        return character_exists
 
 get_existing_character = """
 SELECT display_name FROM character WHERE discord_id = ?

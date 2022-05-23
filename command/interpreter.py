@@ -22,6 +22,16 @@ class Interpreter:
         
         print("Interpreter initialized")
 
+    async def __handle_command(self, command, message):
+        if await self.help_module.handle_command(command, message):
+            return
+        if await self.character_module.handle_command(command, message):
+            return
+        if await self.location_module.handle_command(command, message):
+            return
+
+        print(f"Command: {command} is not supported by any modules")
+
     async def interpret(self, message):
         raw = message.content.strip()
         command = self.__clean(raw)
@@ -46,16 +56,6 @@ class Interpreter:
             print(f"Processing transaction response: {transaction.description}, {raw}")
             await transaction.function(message, transaction.state)
             return
-
-    async def __handle_command(self, command, message):
-        if await self.help_module.handle_command(command, message):
-            return
-        if await self.character_module.handle_command(command, message):
-            return
-        if await self.location_module.handle_command(command, message):
-            return
-
-        print(f"Command: {command} is not supported by any modules")
 
     def __ignore(self, raw, command, message):
         if raw == self.prefix:

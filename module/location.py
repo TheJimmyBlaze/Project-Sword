@@ -66,14 +66,24 @@ class Location:
         location_row = self.connection.get_query(get_character_location, [discord_id])
 
         location = LocationDictionary.get_default_location()
-        if len(location_row) > 0:
-            location_id = location_row[0][0]
-            if location_id != None:
-                location = LocationDictionary.find_location_by_id(location_id)
+        location_id = location_row[0][0]
+        if location_id == None:
+            self.set_character_location(discord_id, location.natural_id)
+        else:
+            location = LocationDictionary.find_location_by_id(location_id)
 
         print(f"User_id: {discord_id} is in location: {location.natural_id}")
         return location
 
+    def set_character_location(self, discord_id, location_id):
+        print(f"Setting location for user_id: {discord_id} to: {location_id}")
+        self.connection.execute_query(set_character_location, [location_id, discord_id])
+
+
 get_character_location = """
 SELECT location_id FROM character WHERE discord_id = ?
+"""
+
+set_character_location = """
+UPDATE character SET location_id = ? WHERE discord_id = ?
 """
