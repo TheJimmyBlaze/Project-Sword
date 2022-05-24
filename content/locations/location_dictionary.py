@@ -23,12 +23,15 @@ class LocationDictionary:
         return None
 
     def find_location_by_display_name(display_name):
+        # Use a regex to replace all non alpha-numeric characters with an empty string
         remove_specials_regex = "[^a-zA-Z0-9 ]"
         clean_name = re.sub(remove_specials_regex, "", display_name).lower()
 
+        # Check if the clean display name matches any location in the dictionary and return it
         for location in locations.values():
             location_clean_name = re.sub(remove_specials_regex, "", location.display_name).lower()
             if location_clean_name == clean_name:
                 return location
                 
+        # If no location was found, the name must be invalid
         return None
