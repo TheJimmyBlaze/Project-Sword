@@ -25,5 +25,3 @@ class DoorIndex:
 
     def get_doors_for_location(self, location_id):
         return self.index[location_id]
-
-

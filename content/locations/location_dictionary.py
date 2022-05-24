@@ -23,7 +23,6 @@ class LocationDictionary:
         return None
 
     def find_location_by_display_name(display_name):
-
         remove_specials_regex = "[^a-zA-Z0-9 ]"
         clean_name = re.sub(remove_specials_regex, "", display_name).lower()
 

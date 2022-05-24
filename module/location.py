@@ -10,18 +10,25 @@ class Location:
 
     async def handle_command(self, command, message):
         if command[0] in ["location", "loc", "lc"]:
+            # Give info about a location
             if len(command) > 1 and command[1] in ["info"]:
+                # Info about a named location
                 if len(command) > 2:
                     await self.__describe_command_location(command, message)
                     return True
-
+                # Info about current location
                 await self.__describe_current_location(message)
+                return True
+
+            # Move to a nearby location 
+            if len(command) > 1 and command[1] in ["move"]:
+                await self.__move_to_location(command, message)
                 return True
 
         return False
 
     async def __describe_current_location(self, message):
-        location = await self.get_character_location(message.author.id)
+        location = self.get_character_location(message.author.id)
 
         location_message = "> You are in...\n> \n"
         location_message += self.__describe_location(location)
@@ -61,7 +68,39 @@ class Location:
 
         return location_description
 
-    async def get_character_location(self, discord_id):
+    async def __move_to_location(self, command, message):
+        if len(command) < 3:
+            await message.channel.send("> You must name a nearby location to move to.")
+            return
+
+        # Get the characters location, and it's doors
+        current_location = self.get_character_location(message.author.id)
+        doors = self.door_index.get_doors_for_location(current_location.natural_id)
+
+        # Get the location specified in the command
+        command_location = self.interpreter.get_command_suffix(command, message, 2)
+        location = LocationDictionary.find_location_by_display_name(command_location)
+        if location == None:
+            await message.channel.send(f"> There is no location: '{command_location}'")
+            return
+
+        # Check if the command location is in the doors list
+        can_move_to_location = False
+        for door in doors:
+            if door.natural_id == location.natural_id:
+                can_move_to_location = True
+                break
+
+        # If the location is not a door, return an error message
+        if not can_move_to_location:
+            await message.channel.send(f"> {location.display_name} is too far away. You can only move to nearby locations.")
+            return
+
+        # Move the player to the location
+        self.set_character_location(message.author.id, location.natural_id)
+        await message.channel.send(f"> You are now in {location.display_name}.")
+
+    def get_character_location(self, discord_id):
         print(f"Getting location for user_id: {discord_id}")
         location_row = self.connection.get_query(get_character_location, [discord_id])
 
