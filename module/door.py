@@ -1,4 +1,4 @@
-from content.locations.location_dictionary import locations
+from content.location_dictionary import locations
 
 class DoorIndex:
     def __init__(self):

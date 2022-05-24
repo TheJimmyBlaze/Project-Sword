@@ -1,8 +1,8 @@
 import re
 
-from content.locations.sunreach.sunreach_village import SunreachVillage
-from content.locations.sunreach.lodestone_inn import LodestoneInn
-from content.locations.sunreach.torags_anvil_blacksmith import ToragsAnvilBlacksmith
+from content.sunreach.locations.sunreach_village import SunreachVillage
+from content.sunreach.locations.lodestone_inn import LodestoneInn
+from content.sunreach.locations.torags_anvil_blacksmith import ToragsAnvilBlacksmith
 
 default_location_id = SunreachVillage.natural_id
 
@@ -13,7 +13,6 @@ locations = {
 }
 
 class LocationDictionary:
-
     def get_default_location():
         return locations[default_location_id]
 

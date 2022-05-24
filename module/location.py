@@ -1,5 +1,4 @@
-from ast import Assert
-from content.locations.location_dictionary import LocationDictionary
+from content.location_dictionary import LocationDictionary
 
 class Location:
     def __init__(self, connection, interpreter, transactor, door_index):
@@ -57,19 +56,18 @@ class Location:
     def __describe_location(self, location, verbose = True):
         # Describe location
         location_description = f">>> ***{location.display_name}***"
-        location_description += f"\n`{location.description}`"
+        location_description += f"\n```{location.description}```"
 
         # If not verbose, just print the description
         if not verbose:
             return location_description
 
         # Describe adjacent locations
-        location_description += "\n"
         doors = self.door_index.get_doors_for_location(location.natural_id)
         location_description += f"\nYou can see {len(doors)} nearby {'location' if len(doors) == 1 else 'locations'}:"
 
         for door in doors:
-            location_description += f"\n`{door.display_name}`"
+            location_description += f"```{door.display_name} - {door.location_type}```"
 
         return location_description
 
