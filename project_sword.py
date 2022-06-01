@@ -6,7 +6,7 @@ from command.transactor import Transactor
 from database.connection import DbConnection
 from database.schema import Schema
 
-from module.door import DoorIndex
+from service.door_index import DoorIndex
 
 token_path = '.token'
 discord_client = discord.Client()

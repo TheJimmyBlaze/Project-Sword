@@ -4,7 +4,7 @@ from command.transactor import DefaultState
 
 create_character_transaction = "Create Character"
 
-class Character:
+class CharacterModule:
     def __init__(self, connection, transactor):
         self.connection = connection
         self.transactor = transactor

@@ -1,0 +1,4 @@
+
+class ActorProfessions:
+    
+    blacksmith = "Blacksmith"

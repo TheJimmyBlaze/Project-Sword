@@ -1,9 +1,9 @@
 from datetime import datetime
 from datetime import timedelta
 
-from module.help import Help
-from module.character import Character
-from module.location import Location
+from module.help_module import HelpModule
+from module.character_module import CharacterModule
+from module.location_module import LocationModule
 
 class Interpreter:
     def __init__(self, discord_client, prefix, timeout, connection, transactor, door_index):
@@ -16,9 +16,9 @@ class Interpreter:
         self.transactor = transactor
         self.door_index = door_index
 
-        self.help_module = Help()
-        self.character_module = Character(connection, transactor)
-        self.location_module = Location(connection, self, transactor, door_index)
+        self.help_module = HelpModule()
+        self.character_module = CharacterModule(connection, transactor)
+        self.location_module = LocationModule(connection, self, transactor, door_index)
         
         print("Interpreter initialized")
 

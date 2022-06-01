@@ -1,6 +1,6 @@
 from content.location_dictionary import LocationDictionary
 
-class Location:
+class LocationModule:
     def __init__(self, connection, interpreter, transactor, door_index):
         self.connection = connection
         self.interpreter = interpreter
@@ -62,6 +62,16 @@ class Location:
         if not verbose:
             return location_description
 
+        # Describe actors
+        actors = location.actors
+        location_description += f"\nYou can see {len(actors)} {'person' if len(actors) == 1 else 'people'} nearby:"
+
+        for actor in actors:
+            location_description += f"```{actor.display_name} - {actor.actor_profession}```"
+
+        if len(actors) == 0:
+            location_description += "```Theres no-one here```"
+
         # Describe adjacent locations
         doors = self.door_index.get_doors_for_location(location.natural_id)
         location_description += f"\nYou can see {len(doors)} nearby {'location' if len(doors) == 1 else 'locations'}:"
@@ -69,6 +79,7 @@ class Location:
         for door in doors:
             location_description += f"```{door.display_name} - {door.location_type}```"
 
+        # All done :)
         return location_description
 
     async def __move_to_location(self, command, message):
